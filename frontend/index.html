@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PUST CSE Resource System — Sign In</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="login-screen">
+  <div class="login-logo">RM</div>
+  <h1 class="login-title">PUST CSE Resource System</h1>
+  <p class="login-subtitle">Pabna University of Science &amp; Technology · CSE Department</p>
+
+  <div class="login-card">
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" data-mode="login">Sign In</button>
+      <button type="button" class="auth-tab" data-mode="register">Create Account</button>
+    </div>
+
+    <div id="authError" class="error-box hidden"></div>
+
+    <form id="authForm" novalidate>
+      <div class="field-block hidden" id="nameBlock">
+        <label class="field-label" for="name">FULL NAME</label>
+        <input type="text" class="text-input" id="name" placeholder="Your full name" autocomplete="name" />
+      </div>
+
+      <div class="field-block">
+        <label class="field-label" for="email">EMAIL</label>
+        <input type="email" class="text-input" id="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+
+      <div class="field-block hidden" id="roleBlock">
+        <span class="field-label">I AM A</span>
+        <div class="seg-row" id="roleRow">
+          <div class="seg-opt selected" data-role="student">🎓 Student</div>
+          <div class="seg-opt" data-role="teacher">📚 Teacher</div>
+          <div class="seg-opt" data-role="staff">🛠 Staff</div>
+        </div>
+      </div>
+
+      <div class="field-block">
+        <label class="field-label" for="password">PASSWORD</label>
+        <div class="pw-wrap">
+          <input type="password" class="text-input" id="password" placeholder="Enter your password" autocomplete="current-password" />
+          <button type="button" class="pw-toggle" id="pwToggle">Show</button>
+        </div>
+      </div>
+
+      <div class="field-block hidden" id="confirmBlock">
+        <label class="field-label" for="confirm">CONFIRM PASSWORD</label>
+        <input type="password" class="text-input" id="confirm" placeholder="Re-enter your password" autocomplete="new-password" />
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn">Sign In</button>
+    </form>
+
+    <p class="auth-hint">
+      Admin accounts are created by the department.<br />
+      Students, teachers and staff can create their own account.
+    </p>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

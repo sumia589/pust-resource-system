@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PUST CSE Resource System</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-badge">RM</div>
+      <div>
+        <div class="brand-name">PUST-CSE</div>
+        <div class="brand-sub">Resource System</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="navList"></nav>
+
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-avatar" id="userAvatar">🙂</div>
+        <div style="min-width:0">
+          <div class="user-name" id="userName">—</div>
+          <div class="user-role" id="userRole">—</div>
+        </div>
+      </div>
+      <button class="btn btn-secondary" style="width:100%" data-action="signout">Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- Resources -->
+    <section id="view-resources" class="hidden">
+      <div class="eyebrow">CSE DEPARTMENT · PUST</div>
+      <h1 class="page-title">Resource Inventory</h1>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-value" id="statTotal">–</div><div class="stat-label">Total Items</div></div>
+        <div class="stat-card"><div class="stat-value" id="statAvailable" style="color:var(--ok)">–</div><div class="stat-label">Available</div></div>
+        <div class="stat-card"><div class="stat-value" id="statInUse" style="color:var(--danger)">–</div><div class="stat-label">In Use / Damaged</div></div>
+        <div class="stat-card"><div class="stat-value" id="statTypes" style="color:var(--accent-a)">–</div><div class="stat-label">Resource Types</div></div>
+      </div>
+      <div class="toolbar">
+        <input class="search-input" id="searchInput" placeholder="Search resources..." />
+        <div id="catChips" style="display:contents"></div>
+      </div>
+      <div class="legend-row">
+        <span class="legend-item"><span class="dot" style="background:var(--info)"></span> Available</span>
+        <span class="legend-item"><span class="dot" style="background:var(--ok)"></span> Working</span>
+        <span class="legend-item"><span class="dot" style="background:var(--danger)"></span> Damaged</span>
+        <span class="legend-item"><span class="dot" style="background:var(--warn)"></span> Needed</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Resource</th><th>Category</th><th>Total</th><th>Available</th><th>Location</th><th>Status</th></tr></thead>
+          <tbody id="resourceTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Request resource (teacher) -->
+    <section id="view-request" class="hidden">
+      <div class="eyebrow">TEACHER</div>
+      <h1 class="page-title">Request a Resource</h1>
+      <div class="form-card">
+        <div id="reqError" class="error-box hidden"></div>
+        <form id="requestForm" novalidate>
+          <div class="form-row">
+            <label for="reqResource">Resource</label>
+            <select class="text-input" id="reqResource"></select>
+          </div>
+          <div class="form-row hidden" id="reqCustomRow">
+            <label for="reqItemName">Item name</label>
+            <input class="text-input" id="reqItemName" placeholder="e.g. HDMI cable" />
+          </div>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label for="reqQuantity">Quantity</label>
+              <input class="text-input" type="number" id="reqQuantity" min="1" value="1" />
+            </div>
+            <div class="form-row">
+              <label for="reqDate">Needed by (optional)</label>
+              <input class="text-input" type="date" id="reqDate" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="reqReason">Reason for request</label>
+            <textarea class="text-input" id="reqReason" placeholder="Explain why you need this resource..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" id="reqSubmit">Submit Request</button>
+        </form>
+      </div>
+      <h2 class="sub-heading">My Requests</h2>
+      <div id="myRequestsList"></div>
+    </section>
+
+    <!-- Report problem (everyone) -->
+    <section id="view-report" class="hidden">
+      <div class="eyebrow">REPORT AN ISSUE</div>
+      <h1 class="page-title">Report a Problem</h1>
+      <div class="form-card">
+        <div id="repError" class="error-box hidden"></div>
+        <form id="reportForm" novalidate>
+          <div class="form-row">
+            <label for="repResource">Resource</label>
+            <select class="text-input" id="repResource"></select>
+          </div>
+          <div class="form-row">
+            <label>Priority</label>
+            <div class="seg-row" id="priorityRow">
+              <div class="seg-opt p-low" data-p="low">Low</div>
+              <div class="seg-opt p-medium selected" data-p="medium">Medium</div>
+              <div class="seg-opt p-high" data-p="high">High</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="repDescription">Describe the problem</label>
+            <textarea class="text-input" id="repDescription" placeholder="What's wrong with this resource?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" id="repSubmit">Submit Report</button>
+        </form>
+      </div>
+      <h2 class="sub-heading">My Reports</h2>
+      <div id="myReportsList"></div>
+    </section>
+
+    <!-- Admin panel -->
+    <section id="view-admin" class="hidden">
+      <div class="eyebrow">ADMIN</div>
+      <h1 class="page-title">Admin Panel</h1>
+      <div class="tabs" id="adminTabs">
+        <button class="tab-btn" data-tab="requests">Requests</button>
+        <button class="tab-btn" data-tab="reports">Problem Reports</button>
+        <button class="tab-btn" data-tab="resources">Manage Resources</button>
+        <button class="tab-btn" data-tab="users">Users</button>
+        <button class="tab-btn" data-tab="records">Records</button>
+      </div>
+      <div id="adminContent"></div>
+    </section>
+
+    <!-- AI suggestions -->
+    <section id="view-ai" class="hidden">
+      <h1 class="page-title no-print">AI Suggestions</h1>
+      <p class="section-sub no-print">Automatic recommendations based on resource levels, problem reports, and requests.</p>
+      <div class="info-card no-print">
+        <div class="info-icon">🤖</div>
+        <div>
+          <div class="info-title">How it works</div>
+          <div class="info-body">The system analyzes resource availability, open problem reports, and pending requests in real time. It flags low stock, urgent issues, and high-demand items — so the admin can act before problems escalate.</div>
+        </div>
+      </div>
+
+      <h2 class="sub-heading no-print">Quick Alerts</h2>
+      <div id="aiList" class="no-print"></div>
+
+      <div class="inline-row no-print" style="margin-top:38px">
+        <div>
+          <h2 class="sub-heading" style="margin:0 0 4px">Full Analysis Report</h2>
+          <div style="color:var(--text-dim);font-size:13.5px">Reads all resources, problem reports and requests, then writes a complete report with purchase priorities.</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm btn-auto" id="genReportBtn" data-action="gen-report">Generate Report</button>
+          <button class="btn btn-secondary btn-sm btn-auto hidden" id="printReportBtn" data-action="print-report">Print / Save as PDF</button>
+        </div>
+      </div>
+      <div id="aiReport"></div>
+      <p class="ai-note no-print">Reports are produced by the built-in analysis engine. A machine-learning model can be plugged in later. Always review the suggestions before acting on them.</p>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✓</span><span id="toastMsg"></span></div>
+<div id="modalRoot"></div>
+
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
